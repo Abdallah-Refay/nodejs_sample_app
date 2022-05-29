@@ -2,8 +2,10 @@ const express = require('express')
 var mysql = require('mysql');
 const app = express()
 const port = 3000
+const instanceHostname = process.env.EC2_HOSTNAME || "Host"
 
-app.get("/db", (req, res) => {
+
+giapp.get("/db", (req, res) => {
   var connection = mysql.createConnection({
     host     : process.env.RDS_HOSTNAME,
     user     : process.env.RDS_USERNAME,
@@ -12,11 +14,11 @@ app.get("/db", (req, res) => {
   });
 connection.connect(function(err) {
   if (err) {
-	  res.send("db connection failed")
+	  res.send(`db connection failed to ${instanceHostname}`)
     console.error('Database connection failed: ' + err.stack);
     return;
   }
-	res.send("db connection successful");
+	res.send(`db connection successful to ${instanceHostname}`);
   console.log('Connected to database.');
 
 connection.end();
@@ -37,12 +39,12 @@ app.get('/redis', (req, res) => {
   client.set('foo','bar', (error, rep)=> {                
     if(error){     
 console.log(error);
-      res.send("redis connection failed");                             
+      res.send(`redis connection failed to ${instanceHostname}`);                             
       return;                
   }                 
   if(rep){                          //JSON objects need to be parsed after reading from redis, since it is stringified before being stored into cache                      
  console.log(rep);
-  res.send("redis is successfuly connected");                 
+  res.send(`redis is successfuly connected to ${instanceHostname}`);                 
  }}) 
   })
   
