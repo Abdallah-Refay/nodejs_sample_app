@@ -5,7 +5,7 @@ const port = 3000
 const instanceHostname = process.env.EC2_HOSTNAME || "Host"
 
 
-giapp.get("/db", (req, res) => {
+app.get("/db", (req, res) => {
   var connection = mysql.createConnection({
     host     : process.env.RDS_HOSTNAME,
     user     : process.env.RDS_USERNAME,
